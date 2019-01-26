@@ -54,6 +54,7 @@ pkgversion() {
 
 multilib_src_configure() {
 	local myconf=(
+		--prefix=/usr/armv7a-unknown-linux-gnueabihf/usr
 		--enable-obsolete
 		--enable-shared
 		--enable-threads
@@ -104,7 +105,7 @@ multilib_src_configure() {
 multilib_src_install() {
 	default
 	# Provide libiberty.h directly.
-	dosym libiberty/libiberty.h /usr/include/libiberty.h
+	dosym libiberty/libiberty.h /usr/armv7a-unknown-linux-gnueabihf/usr/include/libiberty.h
 }
 
 multilib_src_install_all() {
