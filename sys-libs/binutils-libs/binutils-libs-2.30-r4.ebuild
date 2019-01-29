@@ -105,7 +105,8 @@ multilib_src_configure() {
 multilib_src_install() {
 	default
 	# Provide libiberty.h directly.
-	dosym libiberty/libiberty.h /usr/armv7a-unknown-linux-gnueabihf/usr/include/libiberty.h
+	dosym libiberty/libiberty.h /usr/include/libiberty.h
+	mv "${ED}"/usr/armv7a-unknown-linux-gnueabihf/* "${ED}"/usr/
 }
 
 multilib_src_install_all() {
