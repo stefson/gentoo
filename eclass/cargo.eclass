@@ -111,6 +111,10 @@ cargo_gen_config() {
 	[source.crates-io]
 	replace-with = "gentoo"
 	local-registry = "/nonexistant"
+
+	[target.armv7-unknown-linux-gnueabihf]
+	linker = "armv7a-unknown-linux-gnueabihf-gcc"
+
 	EOF
 }
 
