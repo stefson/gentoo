@@ -38,7 +38,7 @@ LLVM_TARGET_USEDEPS=${ALL_LLVM_TARGETS[@]/%/?}
 
 LICENSE="|| ( MIT Apache-2.0 ) BSD-1 BSD-2 BSD-4 UoI-NCSA"
 
-IUSE="clippy cpu_flags_x86_sse2 debug doc libressl rls rustfmt system-llvm wasm ${ALL_LLVM_TARGETS[*]}"
+IUSE="clippy cpu_flags_x86_sse2 debug doc libressl rls rustfmt rust-std-armv7 system-llvm wasm ${ALL_LLVM_TARGETS[*]}"
 
 COMMON_DEPEND=">=app-eselect/eselect-rust-0.3_pre20150425
 		sys-libs/zlib
@@ -126,6 +126,10 @@ src_configure() {
 	if use wasm; then
 		rust_targets="${rust_targets},\"wasm32-unknown-unknown\""
 	fi
+
+	if use rust-std-armv7; then
+		rust_targets="${rust_targets},\"armv7-unknown-linux-gnueabihf\""
+	fi
 	rust_targets="${rust_targets#,}"
 
 	local extended="true" tools="\"cargo\","
@@ -205,6 +209,18 @@ src_configure() {
 		cat <<- EOF >> "${S}"/config.toml
 			[target.wasm32-unknown-unknown]
 			linker = "rust-lld"
+		EOF
+	fi
+
+
+	if use rust-std-armv7; then
+		cat <<- EOF >> "${S}"/config.toml
+			[target.armv7-unknown-linux-gnueabihf]
+			cc = "armv7a-unknown-linux-gnueabihf-gcc"
+			cxx = "armv7a-unknown-linux-gnueabihf-g++"
+			linker = "armv7a-unknown-linux-gnueabihf-gcc"
+			ar = "armv7a-unknown-linux-gnueabihf-ar"
+			llvm-config = "/usr/armv7a-unknown-linux-gnueabihf/usr/lib/llvm/7/bin/llvm-config"
 		EOF
 	fi
 }
