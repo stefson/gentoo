@@ -220,7 +220,6 @@ src_configure() {
 			cxx = "armv7a-unknown-linux-gnueabihf-g++"
 			linker = "armv7a-unknown-linux-gnueabihf-gcc"
 			ar = "armv7a-unknown-linux-gnueabihf-ar"
-			llvm-config = "/usr/armv7a-unknown-linux-gnueabihf/usr/lib/llvm/7/bin/llvm-config"
 		EOF
 	fi
 }
