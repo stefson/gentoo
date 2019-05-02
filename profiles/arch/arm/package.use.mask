@@ -1,6 +1,9 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# unmask for testing with cross-compile
+>=www-client/firefox-66.0.2 -pgo
+
 # Lars Wendler <polynomial-c@gentoo.org> (29 Apr 2019)
 # Requires app-text/discount and net-libs/webkit-gtk which both have
 # no keywords on arm
