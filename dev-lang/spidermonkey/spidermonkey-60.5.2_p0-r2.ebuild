@@ -55,8 +55,7 @@ src_prepare() {
 	fi
 
 	cd "${S}/js/src" || die
-	eautoconf old-configure.in
-	eautoconf
+	autoconf-2.13
 
 	# there is a default config.cache that messes everything up
 	rm -f "${S}/js/src"/config.cache || die
@@ -75,50 +74,51 @@ src_configure() {
 		--with-system-zlib \
 		--disable-optimize \
 		--with-intl-api \
+		--target=armv7a-unknown-linux-gnueabihf \
+		--host=x86_64-pc-linux-gnu \
 		$(use_with system-icu) \
 		$(use_enable debug) \
 		$(use_enable jit ion) \
 		$(use_enable test tests) \
 		XARGS="/usr/bin/xargs" \
-		CONFIG_SHELL="${EPREFIX}/bin/bash" \
-		CC="${CC}" CXX="${CXX}" LD="${LD}" AR="${AR}" RANLIB="${RANLIB}"
+		CONFIG_SHELL="${EPREFIX}/bin/bash"
 }
 
-cross_make() {
-	emake \
-		CFLAGS="${BUILD_CFLAGS}" \
-		CXXFLAGS="${BUILD_CXXFLAGS}" \
-		AR="${BUILD_AR}" \
-		CC="${BUILD_CC}" \
-		CXX="${BUILD_CXX}" \
-		RANLIB="${BUILD_RANLIB}" \
-		"$@"
-}
+#cross_make() {
+#	emake \
+#		CFLAGS="${BUILD_CFLAGS}" \
+#		CXXFLAGS="${BUILD_CXXFLAGS}" \
+#		AR="${BUILD_AR}" \
+#		CC="${BUILD_CC}" \
+#		CXX="${BUILD_CXX}" \
+#		RANLIB="${BUILD_RANLIB}" \
+#		"$@"
+#}
 src_compile() {
 	cd "${BUILDDIR}" || die
-	if tc-is-cross-compiler; then
-		tc-export_build_env BUILD_{AR,CC,CXX,RANLIB}
-		cross_make \
-			MOZ_OPTIMIZE_FLAGS="" MOZ_DEBUG_FLAGS="" \
-			HOST_OPTIMIZE_FLAGS="" MODULE_OPTIMIZE_FLAGS="" \
-			MOZ_PGO_OPTIMIZE_FLAGS="" \
-			host_jsoplengen host_jskwgen
-		cross_make \
-			MOZ_OPTIMIZE_FLAGS="" MOZ_DEBUG_FLAGS="" HOST_OPTIMIZE_FLAGS="" \
-			-C config nsinstall
-		mv {,native-}host_jskwgen || die
-		mv {,native-}host_jsoplengen || die
-		mv config/{,native-}nsinstall || die
-		sed -i \
-			-e 's@./host_jskwgen@./native-host_jskwgen@' \
-			-e 's@./host_jsoplengen@./native-host_jsoplengen@' \
-			Makefile || die
-		sed -i -e 's@/nsinstall@/native-nsinstall@' config/config.mk || die
-		rm -f config/host_nsinstall.o \
-			config/host_pathsub.o \
-			host_jskwgen.o \
-			host_jsoplengen.o || die
-	fi
+#	if tc-is-cross-compiler; then
+#		tc-export_build_env BUILD_{AR,CC,CXX,RANLIB}
+#		cross_make \
+#			MOZ_OPTIMIZE_FLAGS="" MOZ_DEBUG_FLAGS="" \
+#			HOST_OPTIMIZE_FLAGS="" MODULE_OPTIMIZE_FLAGS="" \
+#			MOZ_PGO_OPTIMIZE_FLAGS="" \
+#			host_jsoplengen host_jskwgen
+#		cross_make \
+#			MOZ_OPTIMIZE_FLAGS="" MOZ_DEBUG_FLAGS="" HOST_OPTIMIZE_FLAGS="" \
+#			-C config nsinstall
+#		mv {,native-}host_jskwgen || die
+#		mv {,native-}host_jsoplengen || die
+#		mv config/{,native-}nsinstall || die
+#		sed -i \
+#			-e 's@./host_jskwgen@./native-host_jskwgen@' \
+#			-e 's@./host_jsoplengen@./native-host_jsoplengen@' \
+#			Makefile || die
+#		sed -i -e 's@/nsinstall@/native-nsinstall@' config/config.mk || die
+#		rm -f config/host_nsinstall.o \
+#			config/host_pathsub.o \
+#			host_jskwgen.o \
+#			host_jsoplengen.o || die
+#	fi
 
 	MOZ_MAKE_FLAGS="${MAKEOPTS}" \
 	emake \
