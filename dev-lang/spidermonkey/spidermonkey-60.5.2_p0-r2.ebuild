@@ -55,9 +55,8 @@ src_prepare() {
 	fi
 
 	cd "${S}/js/src" || die
-	eautoconf old-configure.in
-	eautoconf
-
+	eautoconf --at-output --at-file old-configure.in > old-configure
+	
 	# there is a default config.cache that messes everything up
 	rm -f "${S}/js/src"/config.cache || die
 
