@@ -348,16 +348,18 @@ eautoheader() {
 # @DESCRIPTION:
 # Runs autoconf.
 eautoconf() {
-	if [[ ! -f configure.ac && ! -f configure.in ]] ; then
-		echo
-		eerror "No configure.{ac,in} present in '${PWD}'!"
-		echo
-		die "No configure.{ac,in} present!"
-	fi
-	if [[ ${WANT_AUTOCONF} != "2.1" && -e configure.in ]] ; then
-		eqawarn "This package has a configure.in file which has long been deprecated.  Please"
-		eqawarn "update it to use configure.ac instead as newer versions of autotools will die"
-		eqawarn "when it finds this file.  See https://bugs.gentoo.org/426262 for details."
+	if [[ $* != *" --at-file "* ]]; then
+		if [[ ! -f configure.ac && ! -f configure.in ]] ; then
+			echo
+			eerror "No configure.{ac,in} present in '${PWD}'!"
+			echo
+			die "No configure.{ac,in} present!"
+		fi
+		if [[ ${WANT_AUTOCONF} != "2.1" && -e configure.in ]] ; then
+			eqawarn "This package has a configure.in file which has long been deprecated.  Please"
+			eqawarn "update it to use configure.ac instead as newer versions of autotools will die"
+			eqawarn "when it finds this file.  See https://bugs.gentoo.org/426262 for details."
+		fi
 	fi
 
 	autotools_run_tool --at-m4flags autoconf "$@"
@@ -477,18 +479,21 @@ autotools_env_setup() {
 # around it in the process.
 autotools_run_tool() {
 	# Process our own internal flags first
-	local autofail=true m4flags=false missing_ok=false return_output=false
+	local autofail=true m4flags=false missing_ok=false return_output=false args=() files=()
 	while [[ -n $1 ]] ; do
 		case $1 in
 		--at-no-fail) autofail=false;;
 		--at-m4flags) m4flags=true;;
 		--at-missing) missing_ok=true;;
 		--at-output)  return_output=true;;
+		--at-file)    shift; files+=( "$1" );;
 		# whatever is left goes to the actual tool
-		*) break;;
+		*) args+=( "$1" );;
 		esac
 		shift
 	done
+
+	set -- "${args[@]}"
 
 	if [[ ${EBUILD_PHASE} != "unpack" && ${EBUILD_PHASE} != "prepare" ]]; then
 		ewarn "QA Warning: running $1 in ${EBUILD_PHASE} phase"
@@ -517,6 +522,8 @@ autotools_run_tool() {
 	if ${m4flags} ; then
 		set -- "${1}" $(autotools_m4dir_include) "${@:2}" $(autotools_m4sysdir_include)
 	fi
+
+	set -- "$@" "${files[@]}"
 
 	# If the caller wants to probe something, then let them do it directly.
 	if ${return_output} ; then
