@@ -31,6 +31,8 @@ DEPEND="${RDEPEND}
 
 DOCS=( README.md doc/PATENTS )
 
+PATCHES=( "${FILESDIR}"/713.patch )
+
 multilib_src_configure() {
 	local -a bits=()
 	use 8bit  && bits+=( 8 )

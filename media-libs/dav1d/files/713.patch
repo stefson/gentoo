@@ -1,0 +1,24 @@
+From 854fc42dcbd4ba0b33b47f5c193593b4babe8eaa Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Martin=20Storsj=C3=B6?= <martin@martin.st>
+Date: Thu, 23 May 2019 23:20:35 +0300
+Subject: [PATCH] arm: Mark the stack as non-executable on ELF
+
+---
+ src/arm/asm.S | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/arm/asm.S b/src/arm/asm.S
+index af96d51..6b1d46f 100644
+--- a/src/arm/asm.S
++++ b/src/arm/asm.S
+@@ -37,6 +37,7 @@
+         .fpu neon
+         .eabi_attribute 10, 0           // suppress Tag_FP_arch
+         .eabi_attribute 12, 0           // suppress Tag_Advanced_SIMD_arch
++        .section .note.GNU-stack,"",%progbits // Mark stack as non-executable
+ #endif
+ 
+ #ifdef _WIN32
+-- 
+2.18.1
+
