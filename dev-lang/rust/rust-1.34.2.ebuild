@@ -18,7 +18,7 @@ else
 	SLOT="stable/${ABI_VER}"
 	MY_P="rustc-${PV}"
 	SRC="${MY_P}-src.tar.xz"
-	KEYWORDS="amd64 ~arm64 ~ppc64 x86"
+	KEYWORDS="amd64 ~arm ~arm64 ~ppc64 x86"
 fi
 
 RUST_STAGE0_VERSION="1.$(($(ver_cut 2) - 1)).0"
@@ -36,7 +36,7 @@ LLVM_TARGET_USEDEPS=${ALL_LLVM_TARGETS[@]/%/?}
 
 LICENSE="|| ( MIT Apache-2.0 ) BSD-1 BSD-2 BSD-4 UoI-NCSA"
 
-IUSE="clippy cpu_flags_x86_sse2 debug doc libressl rls rustfmt system-llvm wasm ${ALL_LLVM_TARGETS[*]}"
+IUSE="clippy cpu_flags_x86_sse2 debug doc libressl rls rustfmt thumbv7neon system-llvm wasm ${ALL_LLVM_TARGETS[*]}"
 
 # Please keep the LLVM dependency block separate. Since LLVM is slotted,
 # we need to *really* make sure we're not pulling one than more slot
@@ -140,6 +140,11 @@ src_configure() {
 	if use wasm; then
 		rust_targets="${rust_targets},\"wasm32-unknown-unknown\""
 	fi
+
+	if use arm && use thumbv7neon; then
+		rust_targets="${rust_targets},\"thumbv7neon-unknown-linux-gnueabihf\""
+	fi
+
 	rust_targets="${rust_targets#,}"
 
 	local extended="true" tools="\"cargo\","
@@ -221,6 +226,16 @@ src_configure() {
 			linker = "rust-lld"
 		EOF
 	fi
+
+	if use arm && use thumbv7neon; then
+		cat <<- EOF >> "${S}"/config.toml
+			[target.thumbv7neon-unknown-linux-gnueabihf]
+			cc = "$(tc-getBUILD_CC)"
+			cxx = "$(tc-getBUILD_CXX)"
+			linker = "$(tc-getCC)"
+			ar = "$(tc-getAR)"
+		EOF
+	fi
 }
 
 src_compile() {
@@ -267,7 +282,6 @@ src_install() {
 	done
 
 	# temp fix for https://bugs.gentoo.org/672816
-	# FIXME: this should handle libdir=lib, not exact arches
 	if { use x86 || use arm; }; then
 		local rust_target wrongdir rightdir
 		rust_target=$(rust_abi $(get_abi_CHOST ${v##*.}))
