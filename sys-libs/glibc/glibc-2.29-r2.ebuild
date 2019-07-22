@@ -1140,8 +1140,13 @@ run_locale_gen() {
 		locale_list="${root}/usr/share/i18n/SUPPORTED"
 	fi
 
-	locale-gen --jobs $(makeopts_jobs) --config "${locale_list}" \
-		--destdir "${root}"
+	if [[ ${MERGE_TYPE} == "binary" ]] ; then
+		locale-gen --jobs $(makeopts_jobs) --config "${locale_list}" \
+			--destdir "${root}"
+	elif  [[ ${MERGE_TYPE} != "binary" ]] ; then
+		locale-gen --jobs 1 --config "${locale_list}" \
+			--destdir "${root}"
+	fi
 }
 
 glibc_do_src_install() {
