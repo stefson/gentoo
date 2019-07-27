@@ -10,6 +10,7 @@
 		<flag name="system-llvm">Use the system LLVM install</flag>
 		<flag name="rls">Install rls component</flag>
 		<flag name="rustfmt">Install rustfmt component</flag>
+		<flag name="thumbv7neon">Build support for the thumbv7-neon target</flag>
 		<flag name="wasm">Build support for the wasm32-unknown-unknown
 		target</flag>
 	</use>
