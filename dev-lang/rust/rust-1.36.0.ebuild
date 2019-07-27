@@ -112,6 +112,12 @@ pre_build_checks() {
 
 pkg_pretend() {
 	pre_build_checks
+
+	use arm && use thumbv7neon && if [[ "$(tc-is-softfloat)" != "no" ]]; then
+		die "Neon support requires hardfloat system."
+	else # don't do anything
+		:;
+	fi
 }
 
 pkg_setup() {
