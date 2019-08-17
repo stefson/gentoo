@@ -17,7 +17,7 @@ SRC_URI="https://dev.gentoo.org/~axs/distfiles/${MY_P}.tar.bz2
 
 LICENSE="NPL-1.1"
 SLOT="60"
-KEYWORDS="alpha amd64 arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh sparc x86 ~x86-fbsd"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86 ~x86-fbsd"
 IUSE="debug +jit minimal +system-icu test"
 
 RESTRICT="ia64? ( test )"
@@ -57,6 +57,9 @@ src_prepare() {
 	cd "${S}/js/src" || die
 	eautoconf --at-output --at-file old-configure.in > old-configure
 	eautoreconf
+
+	# remove options that are not correct from js-config
+	sed '/lib-filenames/d' -i "${S}"/js/src/build/js-config.in || die "failed to remove invalid option from js-config"
 
 	# there is a default config.cache that messes everything up
 	rm -f "${S}/js/src"/config.cache || die
