@@ -34,7 +34,7 @@ RDEPEND=">=dev-libs/nspr-4.13.1
 DEPEND="${RDEPEND}"
 
 pkg_pretend() {
-	CHECKREQS_DISK_BUILD="2G"
+	CHECKREQS_DISK_BUILD="3G"
 
 	check-reqs_pkg_setup
 }
