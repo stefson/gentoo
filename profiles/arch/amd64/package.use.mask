@@ -17,6 +17,11 @@
 
 #--- END OF EXAMPLES ---
 
+# Steffen Kuhn <nielson2@yandex.com> (2019-08-29)
+# amd64 stages have rustdoc, rustfmt and clippy available.
+>=dev-lang/rust-bin-1.26.0 -doc
+>=dev-lang/rust-bin-1.37.0 -rustfmt -clippy
+
 # Thomas Deutschmann <whissi@gentoo.org> (2019-08-03)
 # Early microcode loading is supported on amd64
 sys-kernel/linux-firmware -initramfs
