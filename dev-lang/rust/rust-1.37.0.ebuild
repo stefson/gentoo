@@ -232,12 +232,22 @@ src_configure() {
 	if use thumbv7neon; then
 		cat <<- EOF >> "${S}"/config.toml
 			[target.thumbv7neon-unknown-linux-gnueabihf]
-			cc = "$(tc-getBUILD_CC)"
-			cxx = "$(tc-getBUILD_CXX)"
-			linker = "$(tc-getCC)"
-			ar = "$(tc-getAR)"
+			cc = "armv7a-unknown-linux-gnueabihf-gcc"
+			cxx = "armv7a-unknown-linux-gnueabihf-g++"
+			linker = "armv7a-unknown-linux-gnueabihf-gcc"
+			ar = "armv7a-unknown-linux-gnueabihf-ar"
 		EOF
 	fi
+
+	if use armv7-hardfloat; then
+			cat <<- EOF >> "${S}"/config.toml
+			[target.armv7-unknown-linux-gnueabihf]
+			cc = "armv7a-unknown-linux-gnueabihf-gcc"
+			cxx = "armv7a-unknown-linux-gnueabihf-g++"
+			linker = "armv7a-unknown-linux-gnueabihf-gcc"
+			ar = "armv7a-unknown-linux-gnueabihf-ar"
+		EOF
+	fi	
 }
 
 src_compile() {
