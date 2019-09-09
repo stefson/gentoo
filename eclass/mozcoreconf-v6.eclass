@@ -229,7 +229,7 @@ mozconfig_init() {
 		append-flags -fPIC
 		;;
 	ppc64)
-		append-flags -fPIC
+		append-flags -fPIC -mminimal-toc
 		# Reduce the memory requirements for linking
 		if use clang ; then
 			# Nothing to do
