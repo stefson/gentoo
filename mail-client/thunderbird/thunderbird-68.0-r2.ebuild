@@ -55,7 +55,7 @@ SRC_URI="${SRC_URI}
 	${PATCH_URIS[@]}"
 
 inherit check-reqs eapi7-ver flag-o-matic toolchain-funcs eutils \
-		gnome2-utils llvm mozcoreconf-v6 pax-utils xdg-utils \
+		gnome2-utils llvm mozcoreconf-v7 pax-utils xdg-utils \
 		autotools mozlinguas-v2 virtualx
 
 CDEPEND="

@@ -41,7 +41,7 @@ fi
 LLVM_MAX_SLOT=8
 
 inherit check-reqs eapi7-ver flag-o-matic toolchain-funcs eutils \
-		gnome2-utils llvm mozcoreconf-v6 pax-utils xdg-utils \
+		gnome2-utils llvm mozcoreconf-v7 pax-utils xdg-utils \
 		autotools mozlinguas-v2 virtualx
 
 DESCRIPTION="Firefox Web Browser"
