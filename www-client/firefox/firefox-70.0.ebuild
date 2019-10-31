@@ -270,12 +270,6 @@ src_prepare() {
 	# Allow user to apply any additional patches without modifing ebuild
 	eapply_user
 
-	local n_jobs=$(makeopts_jobs)
-	if [[ ${n_jobs} == 1 ]]; then
-		einfo "Building with MAKEOPTS=-j1 is known to fail (bug #687028); Forcing MAKEOPTS=-j2 ..."
-		export MAKEOPTS=-j2
-	fi
-
 	# Enable gnomebreakpad
 	if use debug ; then
 		sed -i -e "s:GNOME_DISABLE_CRASH_DIALOG=1:GNOME_DISABLE_CRASH_DIALOG=0:g" \
