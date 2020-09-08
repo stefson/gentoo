@@ -174,7 +174,8 @@ src_configure() {
 		$(use_enable debug) \
 		$(use_enable jit) \
 		$(use_enable test tests) \
-		XARGS="${EPREFIX}/usr/bin/xargs"
+		XARGS="${EPREFIX}/usr/bin/xargs" \
+		LLVM_OBJDUMP="${EPREFIX}/usr/lib/llvm/${LLVM_SLOT}/bin/llvm-objdump"
 }
 
 src_compile() {
