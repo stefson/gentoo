@@ -855,6 +855,8 @@ src_install() {
 		EOF
 	fi
 
+	rm -frv "${BUILD_OBJ_DIR}"/dist/bin/browser/features/* || die
+
 	# Install language packs
 	local langpacks=( $(find "${WORKDIR}/language_packs" -type f -name '*.xpi') )
 	if [[ -n "${langpacks}" ]] ; then
