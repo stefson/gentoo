@@ -7,6 +7,15 @@ pref("browser.newtabpage.activity-stream.feeds.section.topstories", false);
 pref("browser.newtabpage.activity-stream.feeds.snippets", false);
 pref("browser.newtabpage.activity-stream.feeds.topsites", false);
 //pref("browser.newtabpage.activity-stream.prerender", false);
+
+pref("browser.library.activity-stream.enabled",false);
+pref("browser.newtabpage.activity-stream.section.highlights.includeBookmarks",false);
+pref("browser.newtabpage.activity-stream.section.highlights.includeDownloads",false);
+pref("browser.newtabpage.activity-stream.section.highlights.includeVisited",false);
+pref("browser.newtabpage.activity-stream.discoverystream.enabled",false);
+
+pref/"browser.newtabpage.activity-stream.default.sites","");
+
 pref("browser.newtabpage.enabled", false);
 pref("browser.startup.page",0);
 
@@ -21,6 +30,7 @@ pref("browser.discovery.enabled", false);
 
 // killswitch for pocket crap
 pref("extensions.pocket.enabled",false);
+pref("browser.newtabpage.activity-stream.section.highlights.includePocket",false);
 //pref("browser.bookmarks.showMobileBookmarks",false);
 
 // disable firefox sync! \o/
@@ -32,11 +42,6 @@ pref("browser.ping-centre.log",false);
 //pref("browser.ping-centre.production.endpoint", "");
 //pref("browser.ping-centre.staging.endpoint", "");
 
-// disable health report
-pref("datareporting.healthreport.about.reportUrl","");
-pref("datareporting.healthreport.uploadEnabled",false);
-//pref("datdatareporting.healthreport.infoURL","");
-pref("datareporting.policy.dataSubmissionEnabled",false);
 
 // disable extension promotion
 pref("browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons", false);
@@ -50,3 +55,23 @@ pref("privacy.donottrackheader.enabled", true);
 pref("browser.display.use_system_colors", false);
 
 //todo: disable telemetry and healtreport
+
+//disable telemetry
+
+pref("toolkit.telemetry.server","");
+pref("toolkit.telemetry.unified",false);
+pref("toolkit.telemetry.archive.enabled",false);
+pref("toolkit.telemetry.cachedClientID","");
+pref("toolkit.telemetry.newProfilePing.enabled",false);
+pref("toolkit.telemetry.shutdownPingSender.enabled",false);
+pref("toolkit.telemetry.updatePing.enabled",false);
+pref("toolkit.telemetry.bhrPing.enabled",false);
+pref("experiments.enabled",false);
+
+// disable health report
+
+pref("datareporting.healthreport.about.reportUrl","");
+pref("datareporting.healthreport.uploadEnabled",false);
+pref("datareporting.policy.dataSubmissionEnabled",false);
+pref("datareporting.healthreport.infoURL","");
+pref("datareporting.policy.firstRunURL","");
