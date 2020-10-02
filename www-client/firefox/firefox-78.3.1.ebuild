@@ -856,6 +856,10 @@ src_install() {
 	fi
 
 	rm -frv "${BUILD_OBJ_DIR}"/dist/bin/browser/features/* || die
+		
+	cat "${FILESDIR}"/privacy-patchset/78.0-privacy.js-1 >> \
+	"${GENTOO_PREFS}" \
+	|| die
 
 	# Install language packs
 	local langpacks=( $(find "${WORKDIR}/language_packs" -type f -name '*.xpi') )

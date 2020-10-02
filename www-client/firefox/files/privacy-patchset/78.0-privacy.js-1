@@ -1,0 +1,9 @@
+// disable firefox sync! \o/
+pref("identity.fxaccounts.enabled",false);
+
+// killswitch for pocket crap
+pref("extensions.pocket.enabled",false);
+
+// enable do not track function
+pref("privacy.donottrackheader.enabled", true);
+
