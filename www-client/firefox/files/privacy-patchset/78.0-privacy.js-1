@@ -56,7 +56,7 @@ pref("browser.display.use_system_colors", false);
 
 //todo: disable telemetry and healtreport
 
-//disable telemetry
+//disable telemetry (not finished yet)
 
 pref("toolkit.telemetry.server","");
 pref("toolkit.telemetry.unified",false);
