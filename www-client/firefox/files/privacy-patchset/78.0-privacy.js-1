@@ -13,6 +13,9 @@ pref("browser.newtabpage.activity-stream.section.highlights.includeBookmarks",fa
 pref("browser.newtabpage.activity-stream.section.highlights.includeDownloads",false);
 pref("browser.newtabpage.activity-stream.section.highlights.includeVisited",false);
 pref("browser.newtabpage.activity-stream.discoverystream.enabled",false);
+pref("browser.newtabpage.activity-stream.showSponsored",false);
+pref("browser.newtabpage.activity-stream.feeds.system.topsites",false);
+pref("browser.newtabpage.activity-stream.feeds.telemetry",false);7
 
 pref("browser.newtabpage.activity-stream.default.sites","");
 
@@ -77,3 +80,34 @@ pref("datareporting.policy.dataSubmissionEnabled",false);
 pref("datareporting.healthreport.infoURL","");
 pref("datareporting.policy.firstRunURL","");
 
+// disable another topsites feature
+
+pref("browser.urlbar.suggest.topsites",false);
+
+// I don't use gamepad
+
+pref("dom.gamepad.enabled",false);
+
+// don't want screenshots
+
+pref("extensions.screenshots.disabled",false);
+
+// safebrowsing killswitch
+
+pref("browser.safebrowsing.allowOverride",false);
+
+pref("browser.safebrowsing.phishing.enabled",false);
+pref("browser.safebrowsing.malware.enabled",false);
+pref("browser.safebrowsing.blockedURIs.enabled",false);
+pref("browser.safebrowsing.downloads.enabled",false);
+pref("browser.safebrowsing.downloads.remote.enabled",false);
+pref("browser.safebrowsing.downloads.remote.block_dangerous",false);
+pref("browser.safebrowsing.downloads.remote.block_dangerous_host",false);
+pref("browser.safebrowsing.downloads.remote.block_potentially_unwanted",false);
+pref("browser.safebrowsing.downloads.remote.block_uncommon",false);
+pref("browser.safebrowsing.downloads.remote.url","");
+pref("browser.safebrowsing.provider.*.gethashURL","");
+pref("browser.safebrowsing.provider.*.updateURL","");
+pref("browser.safebrowsing.provider.google.lists","")
+
+pref("browser.safebrowsing.downloads.remote.timeout_ms",1);
