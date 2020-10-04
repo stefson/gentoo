@@ -17,6 +17,18 @@ pref("browser.newtabpage.activity-stream.showSponsored",false);
 pref("browser.newtabpage.activity-stream.feeds.system.topsites",false);
 pref("browser.newtabpage.activity-stream.feeds.telemetry",false);
 
+pref("browser.newtabpage.activity-stream.discoverystream.spocs.personalized",false);
+pref("browser.newtabpage.activity-stream.feeds.aboutpreferences",false);
+pref("browser.newtabpage.activity-stream.feeds.asrouterfeed",false);
+pref("browser.newtabpage.activity-stream.feeds.discoverystreamfeed",false);
+pref("browser.newtabpage.activity-stream.feeds.newtabinit",false);
+pref("browser.newtabpage.activity-stream.feeds.places",false);
+pref("browser.newtabpage.activity-stream.feeds.prefs",false);
+pref("browser.newtabpage.activity-stream.feeds.recommendationproviderswitcher",false);
+pref("browser.newtabpage.activity-stream.feeds.sections",false);
+pref("browser.newtabpage.activity-stream.feeds.systemtick",false);
+pref("browser.newtabpage.activity-stream.showSearch",false);
+
 pref("browser.newtabpage.activity-stream.default.sites","");
 
 pref("browser.newtabpage.enabled",false);
@@ -106,8 +118,33 @@ pref("browser.safebrowsing.downloads.remote.block_dangerous_host",false);
 pref("browser.safebrowsing.downloads.remote.block_potentially_unwanted",false);
 pref("browser.safebrowsing.downloads.remote.block_uncommon",false);
 pref("browser.safebrowsing.downloads.remote.url","");
-pref("browser.safebrowsing.provider.*.gethashURL","");
-pref("browser.safebrowsing.provider.*.updateURL","");
-pref("browser.safebrowsing.provider.google.lists","")
 
+//pref("browser.safebrowsing.provider.*.gethashURL","");
+pref("browser.safebrowsing.provider.google.gethashURL","");
+pref("browser.safebrowsing.provider.google4.gethashURL","");
+pref("browser.safebrowsing.provider.mozilla.gethashURL","");
+pref("urlclassifier.gethash.timeout_ms","1");
+
+//pref("browser.safebrowsing.provider.*.updateURL","");
+pref("browser.safebrowsing.provider.google.updateURL","");
+pref("browser.safebrowsing.provider.google4.updateURL","");
+pref("browser.safebrowsing.provider.mozilla.updateURL","");
+
+pref("browser.safebrowsing.provider.google.lists","");
 pref("browser.safebrowsing.downloads.remote.timeout_ms",1);
+
+// don't use formautofill stuff
+
+pref("signon.autofillForms",false);
+pref("signon.generation.enabled",false);
+pref("signon.management.page.breach-alerts.enabled",false);
+pref("signon.rememberSignons",false);
+
+// allow custom css stuff
+
+pref("toolkit.legacyUserProfileCustomizations.stylesheets",true);
+
+// this disables slipstreaming search into url
+pref("browser.urlbar.suggest.searches",false);
+pref("browser.search.suggest.enabled", false);
+
