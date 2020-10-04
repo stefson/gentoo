@@ -26,27 +26,30 @@ if [[ -n ${MOZ_ESR} ]] ; then
 	MOZ_PV="${MOZ_PV}esr"
 fi
 
+MOZ_PN="${PN%-bin}"
+MOZ_P="${MOZ_PN}-${MOZ_PV}"
+
 inherit autotools check-reqs desktop flag-o-matic gnome2-utils llvm \
 	multiprocessing pax-utils python-any-r1 toolchain-funcs \
 	virtualx xdg
 
-MOZ_SRC_BASE_URI="https://archive.mozilla.org/pub/${PN}/releases/${MOZ_PV}"
+MOZ_SRC_BASE_URI="https://archive.mozilla.org/pub/${MOZ_PN}/releases/${MOZ_PV}"
 
 if [[ ${PV} == *_rc* ]] ; then
-	MOZ_SRC_BASE_URI="https://archive.mozilla.org/pub/${PN}/candidates/${MOZ_PV}-candidates/build${PV##*_rc}"
+	MOZ_SRC_BASE_URI="https://archive.mozilla.org/pub/${MOZ_PN}/candidates/${MOZ_PV}-candidates/build${PV##*_rc}"
 fi
 
 PATCH_URIS=(
 	https://dev.gentoo.org/~{axs,polynomial-c,whissi}/mozilla/patchsets/${FIREFOX_PATCHSET}
 )
 
-SRC_URI="${MOZ_SRC_BASE_URI}/source/${PN}-${MOZ_PV}.source.tar.xz
+SRC_URI="${MOZ_SRC_BASE_URI}/source/${MOZ_P}.source.tar.xz
 	${PATCH_URIS[@]}"
 
 DESCRIPTION="Firefox Web Browser"
 HOMEPAGE="https://www.mozilla.com/firefox"
 
-KEYWORDS="~amd64 ~arm64 ~ppc64 ~x86"
+KEYWORDS="amd64 arm64 ~ppc64 x86"
 
 SLOT="0/esr$(ver_cut 1)"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
@@ -63,7 +66,7 @@ BDEPEND="${PYTHON_DEPS}
 	>=dev-util/cbindgen-0.14.3
 	>=net-libs/nodejs-10.19.0
 	virtual/pkgconfig
-	>=virtual/rust-1.43.0
+	>=virtual/rust-1.41.0
 	|| (
 		(
 			sys-devel/clang:11
@@ -240,7 +243,7 @@ mozilla_set_globals() {
 		fi
 
 		SRC_URI+=" l10n_${xflag/[_@]/-}? ("
-		SRC_URI+=" ${MOZ_SRC_BASE_URI}/linux-x86_64/xpi/${lang}.xpi -> ${PN}-${MOZ_PV}-${lang}.xpi"
+		SRC_URI+=" ${MOZ_SRC_BASE_URI}/linux-x86_64/xpi/${lang}.xpi -> ${MOZ_P}-${lang}.xpi"
 		SRC_URI+=" )"
 		IUSE+=" l10n_${xflag/[_@]/-}"
 	done
@@ -362,7 +365,7 @@ pkg_pretend() {
 
 		# Ensure we have enough disk space to compile
 		if use pgo || use lto || use debug ; then
-			CHECKREQS_DISK_BUILD="13G"
+			CHECKREQS_DISK_BUILD="9G"
 		else
 			CHECKREQS_DISK_BUILD="5G"
 		fi
@@ -381,7 +384,7 @@ pkg_setup() {
 
 		# Ensure we have enough disk space to compile
 		if use pgo || use lto || use debug ; then
-			CHECKREQS_DISK_BUILD="13G"
+			CHECKREQS_DISK_BUILD="9G"
 		else
 			CHECKREQS_DISK_BUILD="5G"
 		fi
@@ -418,6 +421,9 @@ pkg_setup() {
 		if [[ -z "${MOZ_API_KEY_GOOGLE+set}" ]] ; then
 			MOZ_API_KEY_GOOGLE="AIzaSyDEAOvatFogGaPi0eTgsV_ZlEzx0ObmepsMzfAc"
 		fi
+
+		# Ensure we use C locale when building, bug #746215
+		export LC_ALL=C
 	fi
 }
 
@@ -533,8 +539,8 @@ src_configure() {
 			# Linking only works when using ld.gold when LTO is enabled
 			mozconfig_add_options_ac "forcing ld=gold due to USE=lto" --enable-linker=gold
 
-			# ThinLTO is currently broken, see bmo#1644409
-			mozconfig_add_options_ac '+lto' --enable-lto=full
+			# ThinLTO is currently broken but only with gcc-10, see bmo#1644409
+			mozconfig_add_options_ac '+lto' --enable-lto=thin
 		fi
 
 		if use pgo ; then
@@ -557,16 +563,10 @@ src_configure() {
 
 	mozconfig_use_enable debug
 	if use debug ; then
-		if is-flag '-g*' ; then
-			mozconfig_add_options_ac '+debug' --enable-debug-symbols=$(get-flag '-g*')
-		else
-			mozconfig_add_options_ac '+debug' --enable-debug-symbols
-		fi
-
 		mozconfig_add_options_ac '+debug' --disable-optimize
 	else
 		if is-flag '-g*' ; then
-			mozconfig_add_options_ac '+debug' --enable-debug-symbols=$(get-flag '-g*')
+			mozconfig_add_options_ac 'from CFLAGS' --enable-debug-symbols=$(get-flag '-g*')
 		else
 			mozconfig_add_options_ac 'Gentoo default' --disable-debug-symbols
 		fi
@@ -730,7 +730,7 @@ src_configure() {
 			elif tc-ld-is-gold ; then
 				append-ldflags -Wl,--no-keep-memory
 			else
-				append-ldflags -Wl,--no-keep-memory -Wl,--reduce-memory-overheads
+				append-ldflags -Wl,--no-keep-memory
 			fi
 			;;
 	esac
@@ -855,6 +855,12 @@ src_install() {
 		EOF
 	fi
 
+#	rm -frv "${BUILD_OBJ_DIR}"/dist/bin/browser/features/* || die
+		
+	cat "${FILESDIR}"/privacy-patchset/78.0-privacy.js-1 >> \
+	"${GENTOO_PREFS}" \
+	|| die
+
 	# Install language packs
 	local langpacks=( $(find "${WORKDIR}/language_packs" -type f -name '*.xpi') )
 	if [[ -n "${langpacks}" ]] ; then
@@ -896,7 +902,7 @@ src_install() {
 	local desktop_file="${FILESDIR}/icon/${PN}-r2.desktop"
 	local display_protocols="auto X11"
 	local icon="${PN}"
-	local name="Mozilla ${PN^}"
+	local name="Mozilla ${MOZ_PN^}"
 	local use_wayland="false"
 
 	if use wayland ; then
@@ -946,7 +952,7 @@ src_install() {
 	done
 
 	# Install generic wrapper script
-	rm "${ED}/usr/bin/${PN}" || die
+	[[ -f "${ED}/usr/bin/${PN}" ]] && rm "${ED}/usr/bin/${PN}"
 	newbin "${FILESDIR}/${PN}.sh" ${PN}
 
 	# Update wrapper
@@ -960,6 +966,8 @@ src_install() {
 
 		sed -i \
 			-e "s:@PREFIX@:${EPREFIX}/usr:" \
+			-e "s:@MOZ_FIVE_HOME@:${MOZILLA_FIVE_HOME}:" \
+			-e "s:@APULSELIB_DIR@:${apulselib}:" \
 			-e "s:@DEFAULT_WAYLAND@:${use_wayland}:" \
 			"${wrapper}" \
 			|| die
@@ -1054,3 +1062,4 @@ pkg_postinst() {
 		elog "in about:config."
 	fi
 }
+
