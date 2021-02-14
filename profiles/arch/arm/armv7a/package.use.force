@@ -1,0 +1,4 @@
+# allow users to choose if they want to have thumb on armv7a
+dev-lang/spidermonkey -cpu_flags_arm_thumb
+mail-client/thunderbird -cpu_flags_arm_thumb
+www-client/firefox -cpu_flags_arm_thumb
