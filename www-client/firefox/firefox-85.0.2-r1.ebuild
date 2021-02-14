@@ -778,8 +778,9 @@ src_configure() {
 		mozconfig_add_options_ac '+cpu_flags_arm_neon' --with-fpu=neon
 	fi
 	
-	if use cpu_flags_arm_thumb && if ! tc-is-clang ; then
+	if use cpu_flags_arm_thumb ; then
 		# thumb options aren't supported when using clang, bug 666966
+		# you will need additional rust-std thumbv7neon-unknown-linux-gnueabihf
 		mozconfig_add_options_ac '+cpu_flags_arm_thumb' \
 			--with-thumb=yes \
 			--with-thumb-interwork=no
