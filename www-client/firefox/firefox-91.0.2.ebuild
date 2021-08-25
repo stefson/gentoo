@@ -61,7 +61,7 @@ KEYWORDS="~amd64 ~arm64 ~ppc64 ~x86"
 
 SLOT="0/$(ver_cut 1)"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
-IUSE="+clang cpu_flags_arm_neon cpu_flags_arm_thumbv2 dbus debug eme-free geckodriver 
+IUSE="+clang cpu_flags_arm_neon cpu_flags_arm_thumb2 dbus debug eme-free geckodriver 
 	+gmp-autoupdate	hardened hwaccel jack lto +openh264 pgo pulseaudio screencast 
 	sndio selinux +system-av1 +system-harfbuzz +system-icu +system-jpeg 
 	+system-libevent +system-libvpx +system-webp wayland wifi"
@@ -788,10 +788,10 @@ src_configure() {
 		mozconfig_add_options_ac '+cpu_flags_arm_neon' --with-fpu=neon
 	fi
 
-	if cpu_flags_arm_thumbv2 && ! tc-is-clang ; then
+	if cpu_flags_arm_thumb2 && ! tc-is-clang ; then
 		# thumb options aren't supported when using clang, bug 666966
 		# this needs special thumbv7neon-unknown-linux-gnueabihf rust-std
-		mozconfig_add_options_ac '+cpu_flags_arm_thumbv2' \
+		mozconfig_add_options_ac '+cpu_flags_arm_thumb2' \
 			--with-thumb=yes \
 			--with-thumb-interwork=no
 	fi
